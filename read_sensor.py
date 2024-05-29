@@ -17,18 +17,12 @@ client = mqtt.Client()
 client.connect(broker_address)
 
 while True:
-    # Read accelerometer and gyroscope data
-    accel_data = mpu.get_accel_data()
+    # Read gyroscope data
     gyro_data = mpu.get_gyro_data()
 
     # Create data payload (JSON format)
     data_payload = {
         "timestamp": time.time(),
-        "accelerometer": {
-            "x": accel_data["x"],
-            "y": accel_data["y"],
-            "z": accel_data["z"]
-        },
         "gyroscope": {
             "x": gyro_data["x"],
             "y": gyro_data["y"],
@@ -41,4 +35,3 @@ while True:
 
     # Wait for a short interval before next reading
     time.sleep(0.1)
-    
