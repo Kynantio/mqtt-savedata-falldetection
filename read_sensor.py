@@ -1,37 +1,35 @@
 import paho.mqtt.client as mqtt
 import time
-import mpu6050
 
-# Define MQTT broker and topic
-broker_address = "YOUR_MQTT_BROKER_ADDRESS"  # Replace with your broker's IP address or hostname
-topic = "GYROSCOPE_DATA"
+# Definisikan alamat dan topik broker MQTT
+broker_address = (34, 101, 198, 128)
+topic = "DATA_GIROSKOP"
 
-# Initialize MPU6050 sensor
-mpu = mpu6050.MPU6050(0x68)
-mpu.setup()
+# Inisialisasi pustaka sensor (ganti dengan pustaka spesifik Anda)
+sensor_lib = "fall-detection/sensor/gyro"  # Ganti dengan pustaka aktual untuk sensor Anda
 
-# Create MQTT client
+# Buat klien MQTT
 client = mqtt.Client()
 
-# Connect to MQTT broker
+# Hubungkan ke broker MQTT
 client.connect(broker_address)
 
 while True:
-    # Read gyroscope data
-    gyro_data = mpu.get_gyro_data()
+    # Baca data giroskop menggunakan fungsi pustaka sensor
+    gyro_data = sensor_lib.read_sensor_data()  # Ganti dengan panggilan fungsi yang sebenarnya
 
-    # Create data payload (JSON format)
+    # Buat muatan data (format JSON)
     data_payload = {
         "timestamp": time.time(),
-        "gyroscope": {
+        "giroskop": {
             "x": gyro_data["x"],
             "y": gyro_data["y"],
             "z": gyro_data["z"]
         }
     }
 
-    # Publish data to MQTT topic
+    # Publikasikan data ke topik MQTT
     client.publish(topic, json.dumps(data_payload))
 
-    # Wait for a short interval before next reading
+    # Tunggu interval singkat sebelum pembacaan berikutnya
     time.sleep(0.1)
